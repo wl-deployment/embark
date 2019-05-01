@@ -115,6 +115,7 @@
     "embark-webserver": "^4.1.0-beta.0",
     "embark-whisper": "^4.1.0-beta.0",
     "embarkjs": "^4.1.0-beta.0",
+    "embarkjs-ens": "^4.1.0-beta.0",
     "embarkjs-ipfs": "^4.1.0-beta.0",
     "embarkjs-swarm": "^4.1.0-beta.0",
     "embarkjs-whisper": "^4.1.0-beta.0",

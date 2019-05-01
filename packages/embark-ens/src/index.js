@@ -1,9 +1,11 @@
-import {joinPath, hashTo32ByteHexString, soliditySha3, recursiveMerge, AddressUtils} from 'embark-utils';
+import {hashTo32ByteHexString, soliditySha3, recursiveMerge, AddressUtils} from 'embark-utils';
 const namehash = require('eth-ens-namehash');
 const async = require('async');
-const ENSFunctions = require('./ENSFunctions');
 import {ens} from 'embark-core/constants.json';
 import EmbarkJS, {Utils as embarkJsUtils} from 'embarkjs';
+import ensJS from 'embarkjs-ens';
+const ENSFunctions = ensJS.ENSFunctions;
+
 const ensConfig = require('./ensContractConfigs');
 const secureSend = embarkJsUtils.secureSend;
 
@@ -373,16 +375,15 @@ class ENS {
       }
 
       this.events.request('code-generator:ready', () => {
-        this.events.request('code-generator:symlink:generate', location, 'eth-ens-namehash', (err, symlinkDest) => {
+        this.events.request('code-generator:symlink:generate', location, 'eth-ens-namehash', (err) => {
           if (err) {
             this.logger.error(__('Error creating a symlink to eth-ens-namehash'));
             return this.logger.error(err.message || err);
           }
           this.events.emit('runcode:register', 'namehash', require('eth-ens-namehash'), () => {
-            let code = `\nconst namehash = global.namehash || require('${symlinkDest}');`;
-            code += this.fs.readFileSync(joinPath(__dirname, 'ENSFunctions.js')).toString();
-            code += "\n" + this.fs.readFileSync(joinPath(__dirname, 'embarkjs.js')).toString();
-            code += "\nEmbarkJS.Names.registerProvider('ens', __embarkENS);";
+            let code = "";
+            code += "\nconst __embarkENS = require('embarkjs-ens')";
+            code += "\nEmbarkJS.Names.registerProvider('ens', __embarkENS.default || __embarkENS);";
 
             this.embark.addCodeToEmbarkJS(code);
           });

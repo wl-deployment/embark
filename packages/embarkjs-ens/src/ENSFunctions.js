@@ -100,10 +100,8 @@ function resolveName(name, ens, createResolverContract, callback, _namehash) {
   });
 }
 
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    registerSubDomain,
-    resolveName,
-    lookupAddress
-  };
+export default {
+  registerSubDomain,
+  resolveName,
+  lookupAddress
 }
