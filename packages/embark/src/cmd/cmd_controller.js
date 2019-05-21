@@ -656,7 +656,6 @@ class EmbarkController {
         engine.init({}, callback);
       },
       function startServices(callback) {
-
         engine.startService("processManager");
         engine.startService("libraryManager");
         engine.startService("codeRunner");
@@ -674,7 +673,9 @@ class EmbarkController {
           engine.startService("codeCoverage");
         }
         engine.startService("testRunner");
-        callback();
+        engine.events.request('code-generator:embarkjs:build', () => {
+          callback();
+        });
       },
       function runTests(callback) {
         engine.events.request('tests:run', options, callback);
